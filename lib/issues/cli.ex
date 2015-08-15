@@ -32,6 +32,7 @@ defmodule Issues.CLI do
     |> decode_response
     |> sort_ascending
     |> Enum.take(count)
+    |> TableFormatter.print_table_for_columns(["number", "created_at", "title"])
   end
 
   def sort_ascending(github_issues) do
