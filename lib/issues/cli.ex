@@ -2,7 +2,7 @@ defmodule Issues.CLI do
 
   @default_count 4
 
-  def run(argv) do
+  def main(argv) do
     argv
     |> parse_args
     |> process
@@ -32,7 +32,7 @@ defmodule Issues.CLI do
     |> decode_response
     |> sort_ascending
     |> Enum.take(count)
-    |> TableFormatter.print_table_for_columns(["number", "created_at", "title"])
+    |> Issues.TableFormatter.print_table_for_columns(["number", "created_at", "title"])
   end
 
   def sort_ascending(github_issues) do
