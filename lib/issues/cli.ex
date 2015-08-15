@@ -8,7 +8,7 @@ defmodule Issues.CLI do
     |> process
   end
 
-  def parse_args(argv) do
+  defp parse_args(argv) do
     parse = OptionParser.parse(argv, switches: [ help: :boolean ],
                                      aliases:  [ h:    :help    ])
     case parse do
@@ -20,14 +20,22 @@ defmodule Issues.CLI do
     end
   end
 
-  def process(:help) do
+  defp process(:help) do
     IO.puts """
     usage: issues <user> <project> [ count | #{@default_count} ]
     """
     System.halt(0)
   end
 
-  def process({ user, project, _count }) do
+  defp process({ user, project, _count }) do
     Issues.GithubIssues.fetch(user, project)
+    |> decode_response
+  end
+
+  defp decode_response({:ok, body}), do: body
+
+  defp decode_response({:error, reason}) do
+    IO.puts "Error fetching from Github: #{reason}"
+    System.halt(2)
   end
 end
