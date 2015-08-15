@@ -5,6 +5,8 @@ defmodule Issues.Mixfile do
     [app: :issues,
      version: "0.0.1",
      elixir: "~> 1.0",
+     name: "issues-fetcher",
+     source_url: "https://github.com/tejasbubane/issues-fetcher",
      escript: escript_config,
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
@@ -30,7 +32,9 @@ defmodule Issues.Mixfile do
   defp deps do
     [
       { :httpoison, "~> 0.4" },
-      { :jsx,       "~> 2.0" }
+      { :jsx,       "~> 2.0" },
+      {:earmark, "~> 0.1", only: :dev},
+      {:ex_doc, "~> 0.8", only: :dev}
     ]
   end
 
