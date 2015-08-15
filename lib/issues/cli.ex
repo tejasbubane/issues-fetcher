@@ -8,7 +8,7 @@ defmodule Issues.CLI do
     |> process
   end
 
-  defp parse_args(argv) do
+  def parse_args(argv) do
     parse = OptionParser.parse(argv, switches: [ help: :boolean ],
                                      aliases:  [ h:    :help    ])
     case parse do
@@ -20,16 +20,23 @@ defmodule Issues.CLI do
     end
   end
 
-  defp process(:help) do
+  def process(:help) do
     IO.puts """
     usage: issues <user> <project> [ count | #{@default_count} ]
     """
     System.halt(0)
   end
 
-  defp process({ user, project, _count }) do
+  def process({ user, project, count }) do
     Issues.GithubIssues.fetch(user, project)
     |> decode_response
+    |> sort_ascending
+    |> Enum.take(count)
+  end
+
+  def sort_ascending(github_issues) do
+    github_issues
+    |> Enum.sort fn i1, i2 -> i1["created_at"] <= i2["created_at"] end
   end
 
   defp decode_response({:ok, body}), do: body
